@@ -4,8 +4,8 @@ import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
+import { kycSteps } from '../../api';
 import { LogoIcon } from '../../assets/images/LogoIcon';
-import { KYC_STEPS } from '../../constants';
 import { Address, Documents, Identity, Phone } from '../../containers';
 import { setDocumentTitle } from '../../helpers';
 import {
@@ -83,17 +83,17 @@ class ConfirmComponent extends React.Component<Props> {
         const { labels } = this.props;
         const lastVerifiedStep = labels.length && labels.slice().reverse().find((label: Label) => label.value === 'verified' && label.scope === 'private');
         const lastVerifiedStepKey = lastVerifiedStep ? lastVerifiedStep.key : '';
-        const lastVerifiedStepIndex = KYC_STEPS.findIndex((step: string) => step === lastVerifiedStepKey);
-        const currentVerificationStep = KYC_STEPS[lastVerifiedStepIndex + 1] || '';
+        const lastVerifiedStepIndex = kycSteps().findIndex((step: string) => step === lastVerifiedStepKey);
+        const currentVerificationStep = kycSteps()[lastVerifiedStepIndex + 1] || '';
 
         return currentVerificationStep;
     };
 
     private handleCheckUserLabels = (labels: Label[]) => {
-        const pendingLabelExists = Boolean(labels.find(label => KYC_STEPS.includes(label.key) && ['pending', 'drafted'].includes(label.value) && label.scope === 'private'));
-        const passedSteps = KYC_STEPS.filter((step: string) => labels.find(label => step === label.key && label.value === 'verified' && label.scope === 'private'));
+        const pendingLabelExists = Boolean(labels.find(label => kycSteps().includes(label.key) && ['pending', 'drafted'].includes(label.value) && label.scope === 'private'));
+        const passedSteps = kycSteps().filter((step: string) => labels.find(label => step === label.key && label.value === 'verified' && label.scope === 'private'));
 
-        if (pendingLabelExists || (KYC_STEPS.length === passedSteps.length)) {
+        if (pendingLabelExists || (kycSteps().length === passedSteps.length)) {
             this.props.history.push('/settings');
         }
     };

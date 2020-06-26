@@ -25,7 +25,7 @@ export const VALUATION_SECONDARY_CURRENCY = 'ETH';
 
 export const PASSWORD_ENTROPY_STEP = 6;
 
-export const KYC_STEPS = ['email', 'phone', 'profile', 'document', 'address'];
+export const DEFAULT_KYC_STEPS = ['email', 'phone', 'profile', 'document', 'address'];
 
 export const colors = {
     light: {

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { KYC_STEPS } from '../../constants';
+import { kycSteps } from '../../api';
 import { changeElementPosition } from '../../helpers/changeElementPosition';
 import { Label, labelFetch, selectLabelData, selectUserInfo, User } from '../../modules';
 
@@ -89,7 +89,7 @@ class ProfileVerificationComponent extends React.Component<Props, State> {
     public renderProgressBar(labels: Label[]) {
         return (
             <div className="pg-profile-page-verification__progress-bar">
-                {KYC_STEPS.map((step, index) => this.renderProgressBarStep(step, index, labels))}
+                {kycSteps().map((step, index) => this.renderProgressBarStep(step, index, labels))}
             </div>
         );
     }
@@ -211,7 +211,7 @@ class ProfileVerificationComponent extends React.Component<Props, State> {
                     <FormattedMessage id="page.body.profile.header.account.profile" />
                 </h3>
                 {this.renderProgressBar(labels)}
-                {KYC_STEPS.map((step: string, index: number) => this.renderVerificationLabel(labels, step, index))}
+                {kycSteps().map((step: string, index: number) => this.renderVerificationLabel(labels, step, index))}
             </div>
         );
     }
@@ -219,10 +219,10 @@ class ProfileVerificationComponent extends React.Component<Props, State> {
     private handleCheckLabel = (labels: Label[], labelToCheck: string) => {
         const targetLabel = labels.length && labels.find((label: Label) => label.key === labelToCheck && label.scope === 'private');
         let targetLabelStatus = targetLabel ? targetLabel.value : '';
-        const indexOfPrevStep = KYC_STEPS.indexOf(labelToCheck) - 1;
+        const indexOfPrevStep = kycSteps().indexOf(labelToCheck) - 1;
 
         if (indexOfPrevStep !== -1) {
-            const prevStepPassed = Boolean(labels.find((label: Label) => label.key === KYC_STEPS[indexOfPrevStep] && label.value === 'verified' && label.scope === 'private'));
+            const prevStepPassed = Boolean(labels.find((label: Label) => label.key === kycSteps()[indexOfPrevStep] && label.value === 'verified' && label.scope === 'private'));
 
             if (!prevStepPassed) {
                 targetLabelStatus = 'blocked';
